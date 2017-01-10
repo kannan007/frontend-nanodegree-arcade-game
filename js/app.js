@@ -62,7 +62,9 @@ Player.prototype.collision = function() {
         if (player.x <= allEnemies[i].x + 50 && player.x >= allEnemies[i].x - 50) {
             if (player.y >= allEnemies[i].y - 50 && player.y <= allEnemies[i].y + 50) {
                 this.score--;
+                this.points = 0;
                 scoreboard();
+                pointsboard();
                 this.reset();
             }
         }
