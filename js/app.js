@@ -1,3 +1,4 @@
+"use strict";
 // A global variable to avoid point issue
 var pointproblem = true;
 // Enemies our player must avoid
@@ -33,15 +34,14 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function() {
+var Player = function(x,y) {
+    Enemy.call(this,x,y);
     this.sprite = 'images/char-boy.png';
-    this.x = 200;
-    this.y = 400;
     this.score = 0;
     this.points = 0;
 };
 Player.prototype.update = function(dt) {
-    if (player.y <= 0) {
+    if (this.y <= 0) {
         this.score++;
         scoreboard();
         alert("You Won");
@@ -51,16 +51,15 @@ Player.prototype.update = function(dt) {
 };
 Player.prototype.reset = function() {
     for (var i = 0; i < allgems.length; i++) {
-        console.log("dude");
         allgems[i].showgem = true;
     }
-    player.x = 200;
-    player.y = 400;
+    this.x = 200;
+    this.y = 400;
 };
 Player.prototype.collision = function() {
-    for (i = 0; i < allEnemies.length; i++) {
-        if (player.x <= allEnemies[i].x + 50 && player.x >= allEnemies[i].x - 50) {
-            if (player.y >= allEnemies[i].y - 50 && player.y <= allEnemies[i].y + 50) {
+    for (var i = 0; i < allEnemies.length; i++) {
+        if (this.x <= allEnemies[i].x + 50 && this.x >= allEnemies[i].x - 50) {
+            if (this.y >= allEnemies[i].y - 50 && this.y <= allEnemies[i].y + 50) {
                 this.score--;
                 this.points = 0;
                 scoreboard();
@@ -70,15 +69,14 @@ Player.prototype.collision = function() {
         }
     }
     for (i = 0; i < allgems.length; i++) {
-        if ((player.x <= allgems[i].x + 45 && player.x >= allgems[i].x - 45) || (player.x == allgems[i].x)) {
-            if ((player.y <= allgems[i].y + 45 && allgems[i].y >= allgems[i].y - 45) || (player.y == allgems[i].y)) {
+        if ((this.x <= allgems[i].x + 45 && this.x >= allgems[i].x - 45) || (this.x == allgems[i].x)) {
+            if ((this.y <= allgems[i].y + 45 && this.y >= allgems[i].y - 45) || (this.y == allgems[i].y)) {
                 if (allgems[i].showgem) {
                     pointproblem = true;
                 }
                 allgems[i].showgem = false;
                 if (pointproblem) {
                     this.points += 5;
-                    console.log(pointproblem);
                     pointproblem = false;
                 }
                 pointsboard();
@@ -139,7 +137,7 @@ var thirdenemy = new Enemy(180, 60, 50);
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [firstenemy, secondenemy, thirdenemy];
 // Place the player object in a variable called player
-var player = new Player();
+var player = new Player(200,400);
 var bluegem = new Gem(200, 200, 'images/Gem-Blue.png');
 var greengem = new Gem(100, 120, 'images/Gem-Green.png');
 var orangegem = new Gem(300, 120, 'images/Gem-Orange.png');
