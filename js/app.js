@@ -1,19 +1,28 @@
 "use strict";
 // A global variable to avoid point issue
 var pointproblem = true;
+var TILE_WIDTH = 101,TILE_HEIGHT = 83;
+var character = function(x,y,sprite)
+{
+    this.x=x;
+    this.y=y;
+    this.sprite=sprite;
+}
+character.prototype.render=function()
+{
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
 // Enemies our player must avoid
-var Enemy = function(x, y, speed) {
+var Enemy = function(x, y, speed, sprite) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-    this.x = x;
-    this.y = y;
+    character.call(this,x,y,sprite);
     this.speed = speed;
 };
-
+Enemy.prototype=Object.create(character.prototype);
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
@@ -27,16 +36,16 @@ Enemy.prototype.update = function(dt) {
 };
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
+/*Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+*/
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function(x,y) {
-    Enemy.call(this,x,y);
-    this.sprite = 'images/char-boy.png';
+var Player = function(x,y,sprite) {
+    character.call(this,x,y,sprite);
     this.score = 0;
     this.points = 0;
 };
@@ -90,22 +99,22 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(e) {
     switch (e) {
         case "left":
-            this.x -= 50;
+            this.x -= TILE_WIDTH;
             if (this.x <= 0) {
                 this.x = 0;
             }
             break;
         case "right":
-            this.x += 50;
+            this.x += TILE_WIDTH;
             if (this.x >= 425) {
                 this.x = 420;
             }
             break;
         case "up":
-            this.y -= 50;
+            this.y -= TILE_HEIGHT;
             break;
         case "down":
-            this.y += 50;
+            this.y += TILE_HEIGHT;
             if (this.y >= 401) {
                 this.y = 400;
             }
@@ -131,13 +140,13 @@ var pointsboard = function() {
 };
 
 // Now instantiate your objects.
-var firstenemy = new Enemy(1, 60, 50);
-var secondenemy = new Enemy(1, 140, 120);
-var thirdenemy = new Enemy(180, 60, 50);
+var firstenemy = new Enemy(1, 60, 50, "images/enemy-bug.png");
+var secondenemy = new Enemy(1, 140, 120, "images/enemy-bug.png");
+var thirdenemy = new Enemy(180, 60, 50, "images/enemy-bug.png");
 // Place all enemy objects in an array called allEnemies
 var allEnemies = [firstenemy, secondenemy, thirdenemy];
 // Place the player object in a variable called player
-var player = new Player(200,400);
+var player = new Player(200,400,"images/char-boy.png");
 var bluegem = new Gem(200, 200, 'images/Gem-Blue.png');
 var greengem = new Gem(100, 120, 'images/Gem-Green.png');
 var orangegem = new Gem(300, 120, 'images/Gem-Orange.png');
